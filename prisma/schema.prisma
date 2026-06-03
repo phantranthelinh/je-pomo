@@ -19,8 +19,6 @@ model User {
 
   timerSessions TimerSession[]
   soundMixes    SoundMix[]
-  friendsOf     Friendship[]   @relation("friendOf")
-  friendsWith   Friendship[]   @relation("friendsWith")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -96,17 +94,4 @@ model SoundChannel {
   soundKey String
   volume   Float
   enabled  Boolean  @default(true)
-}
-
-model Friendship {
-  id        String   @id @default(cuid())
-  userId    String
-  friendId  String
-  user      User     @relation("friendOf", fields: [userId], references: [id], onDelete: Cascade)
-  friend    User     @relation("friendsWith", fields: [friendId], references: [id], onDelete: Cascade)
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
-
-  @@unique([userId, friendId])
-  @@index([friendId])
 }

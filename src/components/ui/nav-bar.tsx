@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { Timer, BarChart3, Trophy, LogIn, LogOut, User } from 'lucide-react';
+import { Timer, BarChart3, LogIn, LogOut, User } from 'lucide-react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -16,7 +16,6 @@ type NavItem = {
 const navItems: NavItem[] = [
   { href: '/', label: 'Timer', icon: <Timer size={20} /> },
   { href: '/dashboard', label: 'Stats', icon: <BarChart3 size={20} /> },
-  { href: '/leaderboard', label: 'Leaderboard', icon: <Trophy size={20} /> },
 ];
 
 export function NavBar() {

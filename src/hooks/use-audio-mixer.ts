@@ -51,10 +51,10 @@ export function useAudioMixer() {
     }
   }, []);
 
+  const { channels, masterVolume, isMuted } = store;
+
   // Sync store state → Howl instances
   useEffect(() => {
-    const { channels, masterVolume, isMuted } = store;
-
     for (const [id, channel] of Object.entries(channels)) {
       if (channel.enabled && !isMuted) {
         const howl = getOrCreateHowl(id);
@@ -78,16 +78,19 @@ export function useAudioMixer() {
         }
       }
     }
-  }, [store.channels, store.masterVolume, store.isMuted, getOrCreateHowl, destroyHowl]);
+  }, [channels, masterVolume, isMuted, getOrCreateHowl, destroyHowl]);
 
   // Cleanup all Howl instances on unmount
   useEffect(() => {
     return () => {
-      for (const id of Object.keys(howlsRef.current)) {
-        destroyHowl(id);
+      const howls = howlsRef.current;
+      for (const howl of Object.values(howls)) {
+        howl.stop();
+        howl.unload();
       }
+      howlsRef.current = {};
     };
-  }, [destroyHowl]);
+  }, []);
 
   return {
     channels: store.channels,

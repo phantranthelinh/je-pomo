@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 type UiState = {
   mixerOpen: boolean;
-  activeTab: 'timer' | 'dashboard' | 'leaderboard';
+  activeTab: 'timer' | 'dashboard';
   notificationPermission: NotificationPermission | 'default';
 };
 

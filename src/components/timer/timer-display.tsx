@@ -10,10 +10,7 @@ type TimerMode = 'focus' | 'break' | 'longBreak' | 'idle';
 
 type TimerDisplayProps = {
   remainingSeconds: number;
-  totalSeconds: number;
   mode: TimerMode;
-  currentRound: number;
-  maxRounds: number;
 };
 
 function formatTime(seconds: number): string {
@@ -27,8 +24,6 @@ const SLIDER_STEPS = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
 export function TimerDisplay({
   remainingSeconds,
   mode,
-  currentRound,
-  maxRounds,
 }: TimerDisplayProps) {
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -39,11 +34,6 @@ export function TimerDisplay({
 
   // Input state — kept local so user can type freely before committing
   const [inputVal, setInputVal] = useState(String(customConfig.focusMin));
-
-  // Sync input when config changes externally (e.g. slider)
-  useEffect(() => {
-    setInputVal(String(customConfig.focusMin));
-  }, [customConfig.focusMin]);
 
   // Close panel on outside click
   useEffect(() => {
@@ -63,6 +53,7 @@ export function TimerDisplay({
 
   function applyMinutes(mins: number) {
     const clamped = clampMinutes(mins);
+    setInputVal(String(clamped));
     setCustomConfig({ ...customConfig, focusMin: clamped });
   }
 
@@ -90,7 +81,10 @@ export function TimerDisplay({
         {/* Settings icon — only show when idle */}
         {mode === 'idle' && (
           <button
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => {
+              if (!open) setInputVal(String(customConfig.focusMin));
+              setOpen((v) => !v);
+            }}
             aria-label="Chỉnh thời gian"
             className={cn(
               'p-1.5 rounded-full transition-all duration-200',

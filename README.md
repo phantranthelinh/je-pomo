@@ -1,58 +1,85 @@
-# 🐭 JeFocus: Focus with Aura
+# JeFocus: Ambient Focus Workspace
 
 ![JeFocus Hero](public/hero.png)
 
-A premium, interactive Pomodoro timer designed for modern focus. **JeFocus** transforms the standard focus timer into an emotionally engaging experience featuring a living mascot, premium aesthetic, and intelligent tracking.
+JeFocus is an ambient sound workspace with a Pomodoro timer built in. The core
+product value is helping people shape a calm, personal work environment through
+multi-channel sound mixing, reusable presets, and focus-session tracking.
 
-## ✨ Features
+Pomodoro supports the experience. The sound workspace is the product.
 
-- **Obsidian Aura Design System**: A sleek, minimalism-focused dark theme with advanced glassmorphism, soft ambient glows, and tactile micro-interactions.
-- **Interactive Mascot (Je)**: Meet Je, your focus companion. Je reacts to your focus sessions and provides emotional companionship during long work blocks.
-- **Daily Focus Tracking**: Visualized progress through a dynamic "Bottom Sheet" tracker. Monitor your sessions, daily targets, and focus history at a glance.
-- **Multi-Channel Ambient Mixer**: Craft your perfect workspace with customizable ambient sound layers (Rain, Coffee Shop, Forest, White Noise).
-- **Flexible Timer Settings**: Ditch the rigid presets. Adjust your focus duration on the fly with a precise slider or direct input for total control.
-- **Progressive Web App (PWA)**: Fully installable on all devices with offline support and system-level notifications.
+## Product Direction
 
-## 🛠️ Technology Stack
+- **Mixer-first workspace**: The main interface should make ambient sound
+  selection, layered playback, and volume control feel primary.
+- **Personal sound presets**: Users should be able to save, edit, and reuse
+  named mixes for contexts like deep work, study, reading, or relaxed work.
+- **Focus sessions**: Timer controls should remain fast and visible, but they
+  should support the active sound environment rather than dominate it.
+- **Statistics and history**: Tracking should help users understand focus time,
+  session patterns, and frequently used presets.
+- **Guest-friendly start**: Guests can start a timer and use default sounds
+  without account setup. Authenticated users get saved presets, history, and
+  sync.
 
-- **Framework**: Next.js 16 (App Router)
-- **Styling**: Tailwind CSS 4.0 (Custom Glass System)
-- **State Management**: Zustand (Client) + TanStack Query & tRPC
-- **Database**: Prisma + PostgreSQL
-- **Animations**: Framer Motion
-- **Audio Logic**: Howler.js
-- **Auth**: NextAuth.js 5
+## MVP Scope
 
-## 🚀 Getting Started
+Included:
 
-1. **Clone & Install**:
+- Authentication
+- Pomodoro timer
+- Multi-channel sound mixer
+- Custom sound presets
+- Session tracking
+- Statistics dashboard
+
+Not in MVP:
+
+- AI features
+- Community sharing
+- Team features
+- Native mobile application
+- Social leaderboard as a core product goal
+
+## Technology Stack
+
+- **Framework**: Next.js 16 App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **State**: Zustand, TanStack Query, tRPC
+- **Database**: Prisma and PostgreSQL
+- **Audio**: Howler.js today; product target is Web Audio API behavior for
+  smooth fades, seamless loops, and multi-track playback
+- **Authentication**: NextAuth.js today; product spec target is Clerk
+- **Deployment**: Vercel
+
+## Getting Started
+
+1. Install dependencies:
+
    ```bash
-   git clone https://github.com/phantranthelinh/je-pomo.git
-   cd je-pomo
    yarn install
    ```
 
-2. **Environment Setup**:
-   Create a `.env` file based on `.env.example` with your `DATABASE_URL`, `NEXTAUTH_SECRET`, and OAuth credentials.
+2. Create a `.env` file based on `.env.example`.
 
-3. **Run Development**:
+3. Run the development server:
+
    ```bash
    yarn dev
    ```
 
-4. **Build for Production**:
+4. Build for production:
+
    ```bash
    yarn build
    yarn start
    ```
 
-## 📐 Design Philosophy
+## UI Goal
 
-JeFocus follows the **Obsidian Aura** design principles:
-- **Calmness**: Neutral backgrounds with soft, high-contrast typography.
-- **Feedback**: Every action has a subtle, high-quality animation.
-- **Engagement**: The mascot provides a sense of companionship during long focus sessions.
-
----
-
-Built with ❤️ by [Phan Tran The Linh](https://github.com/phantranthelinh)
+The first viewport should feel like a focused audio workspace: sound controls,
+active preset context, and the running session should be immediately legible.
+The visual system should stay calm and low-distraction, with focus mode
+available when the user wants only current time, remaining time, and preset
+name.

@@ -3,15 +3,10 @@
 import { useEffect } from 'react';
 import { TimerDisplay } from '@/components/timer/timer-display';
 import { TimerControls } from '@/components/timer/timer-controls';
-
-import { MixerPanel } from '@/components/audio/mixer-panel';
-import { StatsCard } from '@/components/social/stats-card';
 import { Mascot } from '@/components/timer/mascot';
 import { DailyTracker } from '@/components/timer/daily-tracker';
 import { useTimer } from '@/hooks/use-timer';
 import { useNotification } from '@/hooks/use-notification';
-import { trpc } from '@/lib/trpc-client';
-import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 
 export default function TimerPage() {
@@ -28,11 +23,6 @@ export default function TimerPage() {
   } = useTimer();
 
   const { requestPermission, notifyTimerComplete } = useNotification();
-  const { data: session } = useSession();
-
-  const statsQuery = trpc.timer.stats.useQuery(undefined, {
-    enabled: !!session?.user,
-  });
 
   const handleStart = () => {
     requestPermission();
@@ -77,16 +67,12 @@ export default function TimerPage() {
 
         <TimerDisplay
           remainingSeconds={remainingSeconds}
-          totalSeconds={totalSeconds}
           mode={mode}
-          currentRound={currentRound}
-          maxRounds={maxRounds}
         />
 
         {/* Controls */}
         <TimerControls
           isRunning={isRunning}
-          mode={mode}
           onStart={handleStart}
           onPause={pause}
           onReset={reset}

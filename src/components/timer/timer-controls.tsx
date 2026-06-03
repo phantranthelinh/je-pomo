@@ -1,11 +1,8 @@
 import { Play, Pause, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type TimerMode = 'focus' | 'break' | 'longBreak' | 'idle';
-
 type TimerControlsProps = {
   isRunning: boolean;
-  mode: TimerMode;
   onStart: () => void;
   onPause: () => void;
   onReset: () => void;
@@ -13,7 +10,6 @@ type TimerControlsProps = {
 
 export function TimerControls({
   isRunning,
-  mode,
   onStart,
   onPause,
   onReset,
