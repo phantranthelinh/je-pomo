@@ -1,15 +1,19 @@
 import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
-import { auth } from '@/lib/auth';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 
 export async function createTRPCContext(_opts: FetchCreateContextFnOptions) { // eslint-disable-line @typescript-eslint/no-unused-vars
-  const session = await auth();
+  const { userId } = await auth();
 
-  return {
-    prisma,
-    session,
-    user: session?.user,
-  };
+  if (userId) {
+    await prisma.user.upsert({
+      where: { id: userId },
+      update: {},
+      create: { id: userId },
+    });
+  }
+
+  return { prisma, userId };
 }
 
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
