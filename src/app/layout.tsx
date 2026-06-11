@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { NavBar } from "@/components/ui/nav-bar";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -21,13 +22,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#F8F9FA] text-foreground transition-colors duration-500">
-        <Providers>
-          <NavBar />
-          {children}
-        </Providers>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className={`${geist.variable} h-full antialiased`}>
+        <body className="min-h-full flex flex-col bg-[#F8F9FA] text-foreground transition-colors duration-500">
+          <Providers>
+            <NavBar />
+            {children}
+          </Providers>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
