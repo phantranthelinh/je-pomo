@@ -2,7 +2,9 @@
 
 import { cn } from '@/lib/utils';
 import { Timer, BarChart3 } from 'lucide-react';
-import { useUser, useClerk, UserButton } from '@clerk/nextjs';
+import { UserButton } from '@clerk/nextjs';
+import { useUserSafe, useClerkSafe } from '@/lib/clerk-hooks';
+import { clerkEnabled } from '@/lib/clerk-config';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SoundPopover } from '@/components/audio/sound-popover';
@@ -20,8 +22,8 @@ const navItems: NavItem[] = [
 
 export function NavBar() {
   const pathname = usePathname();
-  const { isSignedIn } = useUser();
-  const { openSignIn } = useClerk();
+  const { isSignedIn } = useUserSafe();
+  const { openSignIn } = useClerkSafe();
 
   return (
     <nav className="glass sticky top-0 z-50 px-4 py-3 flex items-center justify-between">
@@ -49,7 +51,7 @@ export function NavBar() {
 
       <div className="flex items-center gap-2">
         <SoundPopover />
-        {isSignedIn ? (
+        {clerkEnabled && isSignedIn ? (
           <UserButton />
         ) : (
           <button

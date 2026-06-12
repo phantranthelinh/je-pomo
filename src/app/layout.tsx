@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { NavBar } from "@/components/ui/nav-bar";
 import { ClerkProvider } from "@clerk/nextjs";
+import { clerkEnabled } from "@/lib/clerk-config";
 import { AudioUnlockPrompt } from "@/components/audio/AudioUnlockPrompt";
 
 const geist = Geist({
@@ -22,6 +23,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const tree = (
+    <html lang="en" className={`${geist.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col bg-[#F8F9FA] text-foreground transition-colors duration-500">
+        <Providers>
+          <NavBar />
+          {children}
+          <AudioUnlockPrompt />
+        </Providers>
+      </body>
+    </html>
+  );
+
+  // Skip ClerkProvider when Clerk is disabled (e.g. preview sandbox) so clerk-js
+  // never loads and never redirects the tab to the accounts.dev dev handshake.
+  if (!clerkEnabled) return tree;
+
   return (
     <ClerkProvider
       appearance={{
@@ -36,15 +53,7 @@ export default function RootLayout({
         },
       }}
     >
-      <html lang="en" className={`${geist.variable} h-full antialiased`}>
-        <body className="min-h-full flex flex-col bg-[#F8F9FA] text-foreground transition-colors duration-500">
-          <Providers>
-            <NavBar />
-            {children}
-            <AudioUnlockPrompt />
-          </Providers>
-        </body>
-      </html>
+      {tree}
     </ClerkProvider>
   );
 }
