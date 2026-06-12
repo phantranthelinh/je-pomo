@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Pomodoro Timer web app (JeFocus) — multi-channel ambient audio mixer, Glassmorphism UI (`#D0FFD6`), social features. Stack: Next.js 15 App Router, tRPC, Zustand, Howler.js, Prisma + PostgreSQL, NextAuth.js, Tailwind CSS.
+Pomodoro Timer web app (JeFocus) — multi-channel ambient audio mixer, Glassmorphism UI (`#D0FFD6`), social features. Stack: Next.js 15 App Router, tRPC, Zustand, Howler.js, Prisma + PostgreSQL, Clerk (`@clerk/nextjs`), Tailwind CSS.
 
 ## Hard Rules — "The Law"
 
@@ -16,7 +16,13 @@ Pomodoro Timer web app (JeFocus) — multi-channel ambient audio mixer, Glassmor
 
 ## Tech Stack
 
-Next.js 15 · tRPC · Zustand · Howler.js · Prisma + PostgreSQL · NextAuth.js (Google/GitHub) · Tailwind CSS · next-pwa · lucide-react · clsx · tailwind-merge
+Next.js 15 · tRPC · Zustand · Howler.js · Prisma + PostgreSQL · Clerk (`@clerk/nextjs`, Google/GitHub OAuth) · Tailwind CSS · next-pwa · lucide-react · clsx · tailwind-merge
+
+### Auth (Clerk)
+- `<ClerkProvider>` wraps app in `src/app/layout.tsx`; `<SignInButton>`/`<UserButton>` in `src/components/ui/nav-bar.tsx`.
+- `src/middleware.ts` — `clerkMiddleware`; only `/dashboard(.*)` is protected via `auth.protect()`.
+- `src/server/context.ts` — `auth()` reads `userId`, upserts `User` (Prisma `User.id` = Clerk userId).
+- Env: `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` (client, **inlined at build time** — must be a Docker build-arg, see `Dockerfile`), `CLERK_SECRET_KEY` (server, runtime).
 
 ## Architecture
 

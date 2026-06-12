@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { Timer, BarChart3 } from 'lucide-react';
-import { useUser, SignInButton, UserButton } from '@clerk/nextjs';
+import { useUser, useClerk, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -20,6 +20,7 @@ const navItems: NavItem[] = [
 export function NavBar() {
   const pathname = usePathname();
   const { isSignedIn } = useUser();
+  const { openSignIn } = useClerk();
 
   return (
     <nav className="glass sticky top-0 z-50 px-4 py-3 flex items-center justify-between">
@@ -49,11 +50,12 @@ export function NavBar() {
         {isSignedIn ? (
           <UserButton />
         ) : (
-          <SignInButton mode="modal">
-            <button className="flex items-center gap-1.5 px-3 py-2 rounded-full text-sm text-brand-text/60 hover:text-brand-text hover:bg-brand-light/30 transition-all">
-              <span className="hidden sm:inline">Sign in</span>
-            </button>
-          </SignInButton>
+          <button
+            onClick={() => openSignIn()}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-full text-sm text-brand-text/60 hover:text-brand-text hover:bg-brand-light/30 transition-all"
+          >
+            <span className="hidden sm:inline">Sign in</span>
+          </button>
         )}
       </div>
     </nav>
