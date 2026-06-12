@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { NavBar } from "@/components/ui/nav-bar";
 import { ClerkProvider } from "@clerk/nextjs";
+import { AudioUnlockPrompt } from "@/components/audio/AudioUnlockPrompt";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({
           <Providers>
             <NavBar />
             {children}
+            <AudioUnlockPrompt />
           </Providers>
         </body>
       </html>
