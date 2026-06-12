@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronUp, Flame, Timer, Zap } from 'lucide-react';
 import { useTrackingStore } from '@/stores/tracking-store';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@clerk/nextjs';
 import { trpc } from '@/lib/trpc-client';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -102,7 +102,7 @@ function StatChip({
 
 export function DailyTracker() {
   const [open, setOpen] = useState(false);
-  const { data: session } = useSession();
+  const { isSignedIn } = useAuth();
 
   // Guest local data
   const getRecentDays = useTrackingStore((s) => s.getRecentDays);
@@ -112,26 +112,26 @@ export function DailyTracker() {
   // Auth server data
   const chartQuery = trpc.timer.dailyChart.useQuery(
     { days: 7 },
-    { enabled: !!session?.user }
+    { enabled: !!isSignedIn }
   );
   const statsQuery = trpc.timer.stats.useQuery(undefined, {
-    enabled: !!session?.user,
+    enabled: !!isSignedIn,
   });
 
   // Decide which data to show
-  const chartDays: DayBar[] = session?.user
+  const chartDays: DayBar[] = isSignedIn
     ? (chartQuery.data ?? localDays)
     : localDays;
 
-  const todaySessions = session?.user
+  const todaySessions = isSignedIn
     ? (statsQuery.data?.today.sessions ?? 0)
     : (todayLocal?.sessions ?? 0);
 
-  const todayTotalSec = session?.user
+  const todayTotalSec = isSignedIn
     ? (statsQuery.data?.today.totalSec ?? 0)
     : (todayLocal?.totalSec ?? 0);
 
-  const streak = session?.user ? (statsQuery.data?.streak ?? 0) : (() => {
+  const streak = isSignedIn ? (statsQuery.data?.streak ?? 0) : (() => {
     // Calculate streak from local data
     const log = useTrackingStore.getState().dailyLog;
     let s = 0;

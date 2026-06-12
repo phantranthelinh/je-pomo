@@ -1,9 +1,8 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { Timer, BarChart3, LogIn, LogOut, User } from 'lucide-react';
-import { useSession, signIn, signOut } from 'next-auth/react';
-import Image from 'next/image';
+import { Timer, BarChart3 } from 'lucide-react';
+import { useUser, SignInButton, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -20,7 +19,7 @@ const navItems: NavItem[] = [
 
 export function NavBar() {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { isSignedIn } = useUser();
 
   return (
     <nav className="glass sticky top-0 z-50 px-4 py-3 flex items-center justify-between">
@@ -47,35 +46,14 @@ export function NavBar() {
       </div>
 
       <div className="flex items-center gap-2">
-        {session?.user ? (
-          <div className="flex items-center gap-2">
-            {session.user.image ? (
-              <Image
-                src={session.user.image}
-                alt={session.user.name ?? ''}
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-            ) : (
-              <User size={20} className="text-brand-text/60" />
-            )}
-            <button
-              onClick={() => signOut()}
-              className="text-brand-text/60 hover:text-brand-text transition-colors"
-              title="Sign out"
-            >
-              <LogOut size={18} />
-            </button>
-          </div>
+        {isSignedIn ? (
+          <UserButton />
         ) : (
-          <button
-            onClick={() => signIn()}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-full text-sm text-brand-text/60 hover:text-brand-text hover:bg-brand-light/30 transition-all"
-          >
-            <LogIn size={18} />
-            <span className="hidden sm:inline">Sign in</span>
-          </button>
+          <SignInButton mode="modal">
+            <button className="flex items-center gap-1.5 px-3 py-2 rounded-full text-sm text-brand-text/60 hover:text-brand-text hover:bg-brand-light/30 transition-all">
+              <span className="hidden sm:inline">Sign in</span>
+            </button>
+          </SignInButton>
         )}
       </div>
     </nav>

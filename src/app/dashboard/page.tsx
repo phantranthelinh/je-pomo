@@ -3,27 +3,9 @@
 import { GlassCard } from '@/components/ui/glass-card';
 import { StatsCard } from '@/components/social/stats-card';
 import { HistoryChart } from '@/components/social/history-chart';
-import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc-client';
-import { useSession, signIn } from 'next-auth/react';
-import { LogIn } from 'lucide-react';
 
 export default function DashboardPage() {
-  const { data: session } = useSession();
-
-  if (!session?.user) {
-    return (
-      <main className="max-w-2xl mx-auto px-4 py-12 text-center">
-        <GlassCard className="py-12">
-          <LogIn size={48} className="mx-auto text-brand-text/30 mb-4" />
-          <h2 className="text-xl font-bold text-brand-text mb-2">Sign in to view stats</h2>
-          <p className="text-brand-text/50 mb-6">Track your focus sessions and build streaks</p>
-          <Button onClick={() => signIn()}>Sign in</Button>
-        </GlassCard>
-      </main>
-    );
-  }
-
   return <DashboardContent />;
 }
 

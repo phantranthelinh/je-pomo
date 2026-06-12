@@ -5,11 +5,11 @@ import { useTimerStore } from '@/stores/timer-store';
 import { useTrackingStore } from '@/stores/tracking-store';
 import { TIMER_PRESETS } from '@/lib/presets';
 import { trpc } from '@/lib/trpc-client';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@clerk/nextjs';
 
 export function useTimer() {
   const store = useTimerStore();
-  const { data: session } = useSession();
+  const { isSignedIn } = useAuth();
   const recordSession = useTrackingStore((s) => s.recordSession);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const completeMutation = trpc.timer.complete.useMutation();
@@ -50,7 +50,7 @@ export function useTimer() {
         recordSession(state.totalSeconds);
 
         // Also persist to server if authenticated
-        if (session?.user) {
+        if (isSignedIn) {
           const breakMin =
             state.preset === 'custom'
               ? state.customConfig.breakMin
@@ -69,7 +69,7 @@ export function useTimer() {
       // Switch to next mode
       state.switchToNextMode();
     }
-  }, [store.remainingSeconds, store.mode, session, recordSession]);
+  }, [store.remainingSeconds, store.mode, isSignedIn, recordSession]);
 
   return {
     mode: store.mode,
